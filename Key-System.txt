@@ -1,1 +1,720 @@
+local Library = {}
+local dragToggle = nil
+getgenv().setclipboard = setclipboard or toclipboard or set_clipboard or (Clipboard and Clipboard.set)
 
+function Library:Tween(Obj,Style,Info,Callback)
+	local Tw = game:GetService("TweenService"):Create(Obj,TweenInfo.new(Style[1],Enum.EasingStyle[Style[2]]),Info)
+	Tw.Completed:Connect(Callback or function() end)
+	Tw:Play()
+end
+
+function Library:Get_Defaults(Defaults,Settings)
+	if Settings and type(Settings) == "table" then else Settings = {} end
+	for i,v in pairs(Defaults) do
+		if Settings[i] == nil then
+			Settings[i] = v
+		end
+	end
+	return Settings
+end
+
+function Library.Notify(data)
+	local Lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
+	local Image = "rbxassetid://"..tostring(data.Image) or ""
+	data.Image = Image
+	Lib:MakeNotification(data)
+end
+
+function Library.updateInput(input)
+	local delta = input.Position - dragStart
+	local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+		startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+	game:GetService('TweenService'):Create(Library["2"], TweenInfo.new(.25), {Position = position}):Play()
+end
+
+function Library:New(Main_Info,Script_To_Load)
+	local Main_Settings = Library:Get_Defaults({Name = "BRS I Key System !",ServiceID = "brsloader",Logo = 18765092041,DiscordLink = "DPHzyecBAB",YoutubeLink = "Youtube Link Here :D",Info = "Hi There...",Current_Key = ""},Main_Info)
+	local PandaAuth = loadstring(game:HttpGet('https://raw.githubusercontent.com/Panda-Repositories/PandaKS_Libraries/main/library/LuaLib/ROBLOX/PandaBetaLib.lua'))()
+	getgenv().AllowLibNotification = false
+	if type(Script_To_Load) == "function" then else Script_To_Load = function() end end
+	
+	do
+		Library.Blur = Instance.new("BlurEffect",game.Lighting)
+		Library.Blur.Size = 10
+		
+		Library["1"] = Instance.new("ScreenGui", game:GetService("RunService"):IsStudio() and game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui") or game.CoreGui);
+		Library["1"]["Name"] = [[Main]];
+
+		-- StarterGui.Main.Background
+		Library["2"] = Instance.new("ImageLabel", Library["1"]);
+		Library["2"]["AnchorPoint"] = Vector2.new(.5,.5)
+		Library["2"]["BorderSizePixel"] = 0;
+		Library["2"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+		Library["2"]["Image"] = [[http://www.roblox.com/asset/?id=18764105933]];
+		Library["2"]["Size"] = UDim2.new(0, 450, 0, 250);
+		Library["2"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		Library["2"]["Name"] = [[Background]];
+		Library["2"]["Position"] = UDim2.new(.5, 0, .5, 0);
+
+		-- StarterGui.Main.Background.UICorner
+		Library["3"] = Instance.new("UICorner", Library["2"]);
+
+
+		-- StarterGui.Main.Background.Title
+		Library["4"] = Instance.new("TextLabel", Library["2"]);
+		Library["4"]["BorderSizePixel"] = 0;
+		Library["4"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+		Library["4"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+		Library["4"]["TextSize"] = 16;
+		Library["4"]["FontFace"] = Font.new([[rbxasset://fonts/families/Ubuntu.json]], Enum.FontWeight.Regular, Enum.FontStyle.Italic);
+		Library["4"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+		Library["4"]["BackgroundTransparency"] = 1;
+		Library["4"]["Size"] = UDim2.new(0, 200, 0, 37);
+		Library["4"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		Library["4"]["Text"] = tostring(Main_Settings.Name);
+		Library["4"]["Name"] = [[Title]];
+		Library["4"]["Position"] = UDim2.new(0.1, 0, 0.016, 0);
+
+		-- StarterGui.Main.Background.Logo
+		Library["5"] = Instance.new("ImageLabel", Library["2"]);
+		Library["5"]["BorderSizePixel"] = 0;
+		Library["5"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+		Library["5"]["Image"] = "http://www.roblox.com/asset/?id="..tostring(Main_Settings.Logo);
+		Library["5"]["Size"] = UDim2.new(0, 30, 0, 30);
+		Library["5"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		Library["5"]["BackgroundTransparency"] = 1;
+		Library["5"]["Name"] = [[Logo]];
+		Library["5"]["Position"] = UDim2.new(0.01333, 0, 0.032, 0);
+
+		-- StarterGui.Main.Background.Logo.UICorner
+		Library["6"] = Instance.new("UICorner", Library["5"]);
+		Library["6"]["CornerRadius"] = UDim.new(0, 20);
+		
+		-- StarterGui.Main.Background.DropShadowHolder
+		Library["21"] = Instance.new("Frame", Library["2"]);
+		Library["21"]["ZIndex"] = 0;
+		Library["21"]["BorderSizePixel"] = 0;
+		Library["21"]["Size"] = UDim2.new(1, 0, 1, 0);
+		Library["21"]["Name"] = [[DropShadowHolder]];
+		Library["21"]["BackgroundTransparency"] = 1;
+
+		-- StarterGui.Main.Background.DropShadowHolder.DropShadow
+		Library["22"] = Instance.new("ImageLabel", Library["21"]);
+		Library["22"]["ZIndex"] = 0;
+		Library["22"]["BorderSizePixel"] = 0;
+		Library["22"]["SliceCenter"] = Rect.new(49, 49, 450, 450);
+		Library["22"]["ScaleType"] = Enum.ScaleType.Slice;
+		Library["22"]["ImageTransparency"] = 0.5;
+		Library["22"]["ImageColor3"] = Color3.fromRGB(171, 0, 255);
+		Library["22"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+		Library["22"]["Image"] = [[rbxassetid://6014261993]];
+		Library["22"]["Size"] = UDim2.new(1, 48, 1, 48);
+		Library["22"]["BackgroundTransparency"] = 1;
+		Library["22"]["Name"] = [[DropShadow]];
+		Library["22"]["Position"] = UDim2.new(0.5, 0, 0.5, 0);
+		
+		--// Info Gui \\--
+		
+		-- StarterGui.Main.Background.Get Key.Info.Main Info
+		Library["13"] = Instance.new("Frame", Library["1"]);
+		Library["13"]["BorderSizePixel"] = 0;
+		Library["13"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+		Library["13"]["Size"] = UDim2.new(0, 233, 0, 57);
+		Library["13"]["Position"] = UDim2.new(0,0);
+		Library["13"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		Library["13"]["Name"] = [[Main Info]];
+		Library["13"]["BackgroundTransparency"] = 0.7;
+		Library["13"]["Visible"] = false
+
+		-- StarterGui.Main.Background.Get Key.Info.Main Info.Right Traiangle
+		Library["14"] = Instance.new("ImageLabel", Library["13"]);
+		Library["14"]["BorderSizePixel"] = 0;
+		Library["14"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+		Library["14"]["Image"] = [[rbxassetid://10556172833]];
+		Library["14"]["Size"] = UDim2.new(0, 10, 0, 10);
+		Library["14"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		Library["14"]["BackgroundTransparency"] = 1;
+		Library["14"]["Rotation"] = 90;
+		Library["14"]["Name"] = [[Right Traiangle]];
+
+		-- StarterGui.Main.Background.Get Key.Info.Main Info.Info
+		Library["15"] = Instance.new("TextLabel", Library["13"]);
+		Library["15"]["TextWrapped"] = true;
+		Library["15"]["BorderSizePixel"] = 0;
+		Library["15"]["TextScaled"] = true;
+		Library["15"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+		Library["15"]["TextSize"] = 16;
+		Library["15"]["FontFace"] = Font.new([[rbxasset://fonts/families/TitilliumWeb.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+		Library["15"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+		Library["15"]["BackgroundTransparency"] = 1;
+		Library["15"]["RichText"] = true;
+		Library["15"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+		Library["15"]["Size"] = UDim2.new(0.85, 0, 0.85, 0);
+		Library["15"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		Library["15"]["Text"] = tostring(Main_Settings.Info);
+		Library["15"]["Name"] = [[Info]];
+		Library["15"]["Position"] = UDim2.new(0.5, 0, 0.5, 0);
+
+		-- StarterGui.Main.Background.Get Key.Info.Main Info.Line
+		Library["16"] = Instance.new("Frame", Library["13"]);
+		Library["16"]["BorderSizePixel"] = 0;
+		Library["16"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+		Library["16"]["Size"] = UDim2.new(1, 0, 0.04, 0);
+		Library["16"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+		Library["16"]["Name"] = [[Line]];
+		
+		--// Key Holder \\--
+		
+		do
+			Library.KeyBox = {}
+			-- StarterGui.Main.Background.Key Holder
+			Library.KeyBox["7"] = Instance.new("Frame", Library["2"]);
+			Library.KeyBox["7"]["BorderSizePixel"] = 0;
+			Library.KeyBox["7"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.KeyBox["7"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+			Library.KeyBox["7"]["Size"] = UDim2.new(0.9, 0, 0.13, 0);
+			Library.KeyBox["7"]["Position"] = UDim2.new(0.5, 0, 0.35, 0);
+			Library.KeyBox["7"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.KeyBox["7"]["Name"] = [[Key Holder]];
+			Library.KeyBox["7"]["BackgroundTransparency"] = 0.7;
+
+			-- StarterGui.Main.Background.Key Holder.TextBox
+			Library.KeyBox["8"] = Instance.new("TextBox", Library.KeyBox["7"]);
+			Library.KeyBox["8"]["CursorPosition"] = -1;
+			Library.KeyBox["8"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.KeyBox["8"]["PlaceholderColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.KeyBox["8"]["BorderSizePixel"] = 0;
+			Library.KeyBox["8"]["TextWrapped"] = true;
+			Library.KeyBox["8"]["TextSize"] = 18;
+			Library.KeyBox["8"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.KeyBox["8"]["FontFace"] = Font.new([[rbxasset://fonts/families/TitilliumWeb.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+			Library.KeyBox["8"]["PlaceholderText"] = [[Put Your Key Here...]];
+			Library.KeyBox["8"]["Size"] = UDim2.new(1, 0, 1, 0);
+			Library.KeyBox["8"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.KeyBox["8"]["Text"] = [[]];
+			Library.KeyBox["8"]["BackgroundTransparency"] = 1;
+
+			-- StarterGui.Main.Background.Key Holder.Line
+			Library.KeyBox["9"] = Instance.new("Frame", Library.KeyBox["7"]);
+			Library.KeyBox["9"]["BorderSizePixel"] = 0;
+			Library.KeyBox["9"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.KeyBox["9"]["Size"] = UDim2.new(1, 0, 0.08, 0);
+			Library.KeyBox["9"]["Position"] = UDim2.new(0, 0, 1, 0);
+			Library.KeyBox["9"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.KeyBox["9"]["Name"] = [[Line]];
+
+			-- StarterGui.Main.Background.Key Holder.UICorner
+			Library.KeyBox["a"] = Instance.new("UICorner", Library.KeyBox["7"]);
+			Library.KeyBox["a"]["CornerRadius"] = UDim.new(0, 4);
+			
+			--//Scripting\\--
+			
+			Library.KeyBox["8"].InputBegan:Connect(function(input)
+				if (input.UserInputType == Enum.UserInputType.MouseButton1) or (input.UserInputType == Enum.UserInputType.Touch) then
+					Library.KeyBox["8"]:CaptureFocus()
+				end
+			end)
+			
+			Library.KeyBox["8"].FocusLost:Connect(function()
+				Library.Current_Key = Library.KeyBox["8"].Text
+			end)
+		end
+		
+		--// Submit Button \\--
+		
+		do
+			Library.Submit = {}
+			
+			-- StarterGui.Main.Background.Submit
+			Library.Submit["b"] = Instance.new("Frame", Library["2"]);
+			Library.Submit["b"]["BorderSizePixel"] = 0;
+			Library.Submit["b"]["BackgroundColor3"] = Color3.fromRGB(68, 0, 101);
+			Library.Submit["b"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+			Library.Submit["b"]["Size"] = UDim2.new(0.42, 0, 0.166, 0);
+			Library.Submit["b"]["Position"] = UDim2.new(0.74, 0, 0.636, 0);
+			Library.Submit["b"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.Submit["b"]["Name"] = [[Submit]];
+
+			-- StarterGui.Main.Background.Submit.UICorner
+			Library.Submit["c"] = Instance.new("UICorner", Library.Submit["b"]);
+			Library.Submit["c"]["CornerRadius"] = UDim.new(0, 10);
+
+			-- StarterGui.Main.Background.Submit.Submit
+			Library.Submit["d"] = Instance.new("TextButton", Library.Submit["b"]);
+			Library.Submit["d"]["TextWrapped"] = true;
+			Library.Submit["d"]["BorderSizePixel"] = 0;
+			Library.Submit["d"]["AutoButtonColor"] = false;
+			Library.Submit["d"]["TextSize"] = 15;
+			Library.Submit["d"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.Submit["d"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.Submit["d"]["FontFace"] = Font.new([[rbxasset://fonts/families/Balthazar.json]], Enum.FontWeight.Regular, Enum.FontStyle.Italic);
+			Library.Submit["d"]["Size"] = UDim2.new(1, 0, 1, 0);
+			Library.Submit["d"]["BackgroundTransparency"] = 1;
+			Library.Submit["d"]["Name"] = [[Submit]];
+			Library.Submit["d"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.Submit["d"]["Text"] = [[Submit]];
+
+			-- StarterGui.Main.Background.Submit.UIStroke
+			Library.Submit["e"] = Instance.new("UIStroke", Library.Submit["b"]);
+			Library.Submit["e"]["Transparency"] = 0.8;
+			
+			--// Scripting \\--
+			
+			Library.Submit["d"].MouseEnter:Connect(function()
+				Library:Tween(Library.Submit["b"],{.3,"Linear"},{Transparency = .15})
+			end)
+			
+			Library.Submit["d"].MouseLeave:Connect(function()
+				Library:Tween(Library.Submit["b"],{.3,"Linear"},{Transparency = 0})
+			end)
+			
+			Library.Submit["d"].InputBegan:Connect(function(input)
+				if (input.UserInputType == Enum.UserInputType.MouseButton1) or (input.UserInputType == Enum.UserInputType.Touch) then
+					Library:Tween(Library.Submit["b"],{.3,"Linear"},{BackgroundColor3 = Color3.fromRGB(113, 0, 170)})
+				end
+			end)
+			
+			Library.Submit["d"].InputEnded:Connect(function(input)
+				if (input.UserInputType == Enum.UserInputType.MouseButton1) or (input.UserInputType == Enum.UserInputType.Touch) then
+					Library:Tween(Library.Submit["b"],{.3,"Linear"},{BackgroundColor3 = Color3.fromRGB(67, 0, 100)},function()						
+						do
+							if PandaAuth:ValidateKey(Main_Settings.ServiceID, Library.Current_Key) then
+								Library.Notify({
+									Name = "Success!",
+									Image = tostring(Main_Settings.Logo),
+									Content = "Correct Key!",
+									Time = 5
+								})
+
+								task.wait(1.5)
+
+								if writefile then
+									writefile("BRS Loader.txt", Library.Current_Key)
+								end
+
+								Library.Notify({
+									Name = "Loading Script!",
+									Image = tostring(Main_Settings.Logo),
+									Content = "If script won't load please contact us.",
+									Time = 5
+								})
+
+								Script_To_Load()
+
+							else
+								if PandaAuth:ValidatePremiumKey(Main_Settings.ServiceID, Library.Current_Key) then
+									Library.Notify({
+										Name = "Success!",
+										Image = tostring(Main_Settings.Logo),
+										Content = "Correct Key!",
+										Time = 5
+									})
+
+									task.wait(1.5)
+
+									if writefile then
+										writefile("BRS Loader.txt", Library.Current_Key)
+									end
+
+									Library.Notify({
+										Name = "Loading Script!",
+										Image = tostring(Main_Settings.Logo),
+										Content = "If script won't load please contact us.",
+										Time = 5
+									})
+
+									Script_To_Load()
+
+								else
+									Library.Notify({
+										Name = "Error!",
+										Image = tostring(Main_Settings.Logo),
+										Content = "Not Authenticated!",
+										Time = 5
+									})
+								end
+							end 
+						end
+					end)
+				end
+			end)
+		end
+		
+		--// Get Key Button \\--
+		
+		do
+			Library.GetKey = {PC = nil,Shake = nil,IsHovering = false}
+			
+			-- StarterGui.Main.Background.Get Key
+			Library.GetKey["f"] = Instance.new("Frame", Library["2"]);
+			Library.GetKey["f"]["BorderSizePixel"] = 0;
+			Library.GetKey["f"]["BackgroundColor3"] = Color3.fromRGB(68, 0, 101);
+			Library.GetKey["f"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+			Library.GetKey["f"]["Size"] = UDim2.new(0.42, 0, 0.166, 0);
+			Library.GetKey["f"]["Position"] = UDim2.new(0.25889, 0, 0.636, 0);
+			Library.GetKey["f"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.GetKey["f"]["Name"] = [[Get Key]];
+
+			-- StarterGui.Main.Background.Get Key.UICorner
+			Library.GetKey["10"] = Instance.new("UICorner", Library.GetKey["f"]);
+			Library.GetKey["10"]["CornerRadius"] = UDim.new(0, 10);
+
+			-- StarterGui.Main.Background.Get Key.UIStroke
+			Library.GetKey["11"] = Instance.new("UIStroke", Library.GetKey["f"]);
+			Library.GetKey["11"]["Transparency"] = 0.8;
+
+			-- StarterGui.Main.Background.Get Key.Info
+			Library.GetKey["12"] = Instance.new("ImageButton", Library.GetKey["f"]);
+			Library.GetKey["12"]["BorderSizePixel"] = 0;
+			Library.GetKey["12"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.GetKey["12"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+			Library.GetKey["12"]["Image"] = [[http://www.roblox.com/asset/?id=18933236323]];
+			Library.GetKey["12"]["Size"] = UDim2.new(0, 28, 0, 28);
+			Library.GetKey["12"]["BackgroundTransparency"] = 1;
+			Library.GetKey["12"]["Name"] = [[Info]];
+			Library.GetKey["12"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.GetKey["12"]["Position"] = UDim2.new(0.91799, 0, 0.5, 0);
+
+			-- StarterGui.Main.Background.Get Key.Info.Main Info
+			Library.GetKey["13"] = Instance.new("Frame", Library.GetKey["12"]);
+			Library.GetKey["13"]["BorderSizePixel"] = 0;
+			Library.GetKey["13"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.GetKey["13"]["Size"] = UDim2.new(0, 232, 0, 30);
+			Library.GetKey["13"]["Position"] = UDim2.new(1.03601, 0, 1.4, 0);
+			Library.GetKey["13"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.GetKey["13"]["Name"] = [[Main Info]];
+			Library.GetKey["13"]["BackgroundTransparency"] = 0.7;
+			Library.GetKey["13"]["Visible"] = false
+
+			-- StarterGui.Main.Background.Get Key.Info.Main Info.Right Traiangle
+			Library.GetKey["14"] = Instance.new("ImageLabel", Library.GetKey["13"]);
+			Library.GetKey["14"]["BorderSizePixel"] = 0;
+			Library.GetKey["14"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.GetKey["14"]["Image"] = [[rbxassetid://10556172833]];
+			Library.GetKey["14"]["Size"] = UDim2.new(0, 10, 0, 10);
+			Library.GetKey["14"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.GetKey["14"]["BackgroundTransparency"] = 1;
+			Library.GetKey["14"]["Rotation"] = 90;
+			Library.GetKey["14"]["Name"] = [[Right Traiangle]];
+
+			-- StarterGui.Main.Background.Get Key.Info.Main Info.Info
+			Library.GetKey["15"] = Instance.new("TextLabel", Library.GetKey["13"]);
+			Library.GetKey["15"]["TextWrapped"] = true;
+			Library.GetKey["15"]["BorderSizePixel"] = 0;
+			Library.GetKey["15"]["TextScaled"] = true;
+			Library.GetKey["15"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.GetKey["15"]["TextSize"] = 16;
+			Library.GetKey["15"]["FontFace"] = Font.new([[rbxasset://fonts/families/TitilliumWeb.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+			Library.GetKey["15"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.GetKey["15"]["BackgroundTransparency"] = 1;
+			Library.GetKey["15"]["RichText"] = true;
+			Library.GetKey["15"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+			Library.GetKey["15"]["Size"] = UDim2.new(0.85, 0, 0.85, 0);
+			Library.GetKey["15"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.GetKey["15"]["Text"] = [[TEST TEST]];
+			Library.GetKey["15"]["Name"] = [[Info]];
+			Library.GetKey["15"]["Position"] = UDim2.new(0.5, 0, 0.5, 0);
+
+			-- StarterGui.Main.Background.Get Key.Info.Main Info.Line
+			Library.GetKey["16"] = Instance.new("Frame", Library.GetKey["13"]);
+			Library.GetKey["16"]["BorderSizePixel"] = 0;
+			Library.GetKey["16"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.GetKey["16"]["Size"] = UDim2.new(1, 0, 0.04, 0);
+			Library.GetKey["16"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.GetKey["16"]["Name"] = [[Line]];
+
+			-- StarterGui.Main.Background.Get Key.Get Key
+			Library.GetKey["17"] = Instance.new("TextButton", Library.GetKey["f"]);
+			Library.GetKey["17"]["TextWrapped"] = true;
+			Library.GetKey["17"]["BorderSizePixel"] = 0;
+			Library.GetKey["17"]["AutoButtonColor"] = false;
+			Library.GetKey["17"]["TextSize"] = 15;
+			Library.GetKey["17"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.GetKey["17"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.GetKey["17"]["FontFace"] = Font.new([[rbxasset://fonts/families/Balthazar.json]], Enum.FontWeight.Regular, Enum.FontStyle.Italic);
+			Library.GetKey["17"]["Size"] = UDim2.new(1, 0, 1, 0);
+			Library.GetKey["17"]["BackgroundTransparency"] = 1;
+			Library.GetKey["17"]["Name"] = [[Get Key]];
+			Library.GetKey["17"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.GetKey["17"]["Text"] = [[Get Key]];
+						
+			Library.GetKey["17"].MouseEnter:Connect(function()
+				Library:Tween(Library.GetKey["f"],{.3,"Linear"},{Transparency = .15})
+			end)
+
+			Library.GetKey["17"].MouseLeave:Connect(function()
+				Library:Tween(Library.GetKey["f"],{.3,"Linear"},{Transparency = 0})
+			end)
+
+			Library.GetKey["17"].InputBegan:Connect(function(input)
+				if (input.UserInputType == Enum.UserInputType.MouseButton1) or (input.UserInputType == Enum.UserInputType.Touch) then
+					Library:Tween(Library.GetKey["f"],{.3,"Linear"},{BackgroundColor3 = Color3.fromRGB(113, 0, 170)})
+				end
+			end)
+
+			Library.GetKey["17"].InputEnded:Connect(function(input)
+				if (input.UserInputType == Enum.UserInputType.MouseButton1) or (input.UserInputType == Enum.UserInputType.Touch) then
+					Library:Tween(Library.GetKey["f"],{.3,"Linear"},{BackgroundColor3 = Color3.fromRGB(67, 0, 100)},function()
+						if setclipboard then
+							setclipboard(PandaAuth:GetKey(Main_Settings.ServiceID))
+							Library.Notify({Name = "Notification!",Image = tostring(Main_Settings.Logo),Content = "Link Copied Successfully!",Time = 5})
+						else
+							Library.Notify({Name = "Key Link : ",Image = tostring(Main_Settings.Logo),Content = tostring(Main_Settings.GetKeyLink),Time = 30})
+						end
+					end)
+				end
+			end)
+			
+			Library.GetKey["12"].InputBegan:Connect(function(input)
+				if (input.UserInputType == Enum.UserInputType.MouseButton1) or (input.UserInputType == Enum.UserInputType.Touch) then
+					Library["13"].Position = input.Position
+					Library["13"].Visible = true
+					Library.GetKey["12"]:TweenSize(UDim2.fromOffset(30,30),Enum.EasingDirection.InOut,Enum.EasingStyle.Linear,.2,true)
+				end
+			end)
+			
+			Library.GetKey["12"].InputEnded:Connect(function(input)
+				if (input.UserInputType == Enum.UserInputType.MouseButton1) or (input.UserInputType == Enum.UserInputType.Touch) then
+					Library["13"].Visible = false
+					Library.GetKey["12"]:TweenSize(UDim2.fromOffset(28,28),Enum.EasingDirection.Out,Enum.EasingStyle.Sine,.2,true)
+				end
+			end)
+			
+			Library.GetKey["12"].MouseEnter:Connect(function()
+				Library.GetKey.IsHovering = true
+				Library["13"].Visible = true
+				Library.GetKey["12"]:TweenSize(UDim2.fromOffset(30,30),Enum.EasingDirection.InOut,Enum.EasingStyle.Linear,.2,true)
+				repeat task.wait()
+					Library:Tween(Library["13"],{.04,"Linear"},{Position = UDim2.fromOffset(game.Players.LocalPlayer:GetMouse().X,game.Players.LocalPlayer:GetMouse().Y)})
+				until Library.GetKey.IsHovering == false
+			end)
+			
+			Library.GetKey["12"].MouseLeave:Connect(function()
+				Library.GetKey.IsHovering = false
+				Library["13"].Visible = false
+				Library.GetKey["12"]:TweenSize(UDim2.fromOffset(28,28),Enum.EasingDirection.Out,Enum.EasingStyle.Sine,.2,true)
+			end)
+		end
+		
+		--// Youtube Button \\--
+		
+		do
+			Library.Youtube = {IsHovering = false}
+			
+			-- StarterGui.Main.Background.Youtube
+			Library.Youtube["18"] = Instance.new("ImageButton", Library["2"]);
+			Library.Youtube["18"]["AnchorPoint"] = Vector2.new(.5,.5)
+			Library.Youtube["18"]["BorderSizePixel"] = 0;
+			Library.Youtube["18"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.Youtube["18"]["Image"] = [[rbxassetid://16250076424]];
+			Library.Youtube["18"]["Size"] = UDim2.new(0, 25, 0, 25);
+			Library.Youtube["18"]["BackgroundTransparency"] = 1;
+			Library.Youtube["18"]["Name"] = [[Youtube]];
+			Library.Youtube["18"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.Youtube["18"]["Position"] = UDim2.new(0.882, 0, 0.064, 0);
+			-- StarterGui.Main.Background.Youtube.UICorner
+			Library.Youtube["19"] = Instance.new("UICorner", Library.Youtube["18"]);
+			Library.Youtube["19"]["CornerRadius"] = UDim.new(0, 20);
+			
+			Library.Youtube["18"].InputBegan:Connect(function(input)
+				if (input.UserInputType == Enum.UserInputType.MouseButton1) or (input.UserInputType == Enum.UserInputType.Touch) then
+					Library.Youtube["18"]:TweenSize(UDim2.fromOffset(28,28),Enum.EasingDirection.Out,Enum.EasingStyle.Sine,.2,true)
+				end
+			end)
+			
+			Library.Youtube["18"].InputEnded:Connect(function(input)
+				if (input.UserInputType == Enum.UserInputType.MouseButton1) or (input.UserInputType == Enum.UserInputType.Touch) then
+					if Library.Youtube.IsHovering == false then
+						Library.Youtube["18"]:TweenSize(UDim2.fromOffset(25,25),Enum.EasingDirection.Out,Enum.EasingStyle.Sine,.2,true)
+					end
+					if setclipboard then
+						setclipboard(Main_Settings.YoutubeLink)
+						Library.Notify({Name = "Notification!",Image = tostring(Main_Settings.Logo),Content = "Youtube Link Copied Successfully!",Time = 5})
+					else
+						Library.Notify({Name = "Youtube Link : ",Image = tostring(Main_Settings.Logo),Content = tostring(Main_Settings.YoutubeLink),Time = 30})
+					end
+				end
+			end)
+			
+			Library.Youtube["18"].MouseEnter:Connect(function(input)
+				Library.Youtube.IsHovering = true
+				Library.Youtube["18"]:TweenSize(UDim2.fromOffset(28,28),Enum.EasingDirection.Out,Enum.EasingStyle.Sine,.2,true)
+			end)
+			
+			Library.Youtube["18"].MouseLeave:Connect(function(input)
+				Library.Youtube.IsHovering = false
+				Library.Youtube["18"]:TweenSize(UDim2.fromOffset(25,25),Enum.EasingDirection.Out,Enum.EasingStyle.Sine,.2,true)
+			end)
+		end
+		
+		--// Discord Button \\--
+		
+		do
+			Library.Discord = {IsHovering = false}
+			
+			-- StarterGui.Main.Background.Help
+			Library.Discord["1a"] = Instance.new("TextLabel", Library["2"]);
+			Library.Discord["1a"]["TextWrapped"] = true;
+			Library.Discord["1a"]["BorderSizePixel"] = 0;
+			Library.Discord["1a"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+			Library.Discord["1a"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.Discord["1a"]["TextSize"] = 20;
+			Library.Discord["1a"]["FontFace"] = Font.new([[rbxasset://fonts/families/Ubuntu.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+			Library.Discord["1a"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.Discord["1a"]["BackgroundTransparency"] = 1;
+			Library.Discord["1a"]["Size"] = UDim2.new(0.28556, 0, 0.15, 0);
+			Library.Discord["1a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.Discord["1a"]["Text"] = [[Need Help ? :]];
+			Library.Discord["1a"]["Name"] = [[Help]];
+			Library.Discord["1a"]["Position"] = UDim2.new(0.01111, 0, 0.848, 0);
+
+			-- StarterGui.Main.Background.Help.UIGradient
+			Library.Discord["1b"] = Instance.new("UIGradient", Library.Discord["1a"]);
+			Library.Discord["1b"]["Color"] = ColorSequence.new{ColorSequenceKeypoint.new(0.000, Color3.fromRGB(255, 0, 255)),ColorSequenceKeypoint.new(1.000, Color3.fromRGB(255, 0, 128))};
+
+			-- StarterGui.Main.Background.Help.Discord
+			Library.Discord["1c"] = Instance.new("ImageButton", Library.Discord["1a"]);
+			Library.Discord["1c"]["BorderSizePixel"] = 0;
+			Library.Discord["1c"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.Discord["1c"]["Image"] = [[http://www.roblox.com/asset/?id=18764097099]];
+			Library.Discord["1c"]["Size"] = UDim2.new(0, 26, 0, 25);
+			Library.Discord["1c"]["BackgroundTransparency"] = 1;
+			Library.Discord["1c"]["Name"] = [[Discord]];
+			Library.Discord["1c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.Discord["1c"]["Position"] = UDim2.new(1.051, 0, 0.47, 0);
+			Library.Discord["1c"]["AnchorPoint"] = Vector2.new(.5,.5)
+
+			-- StarterGui.Main.Background.Help.Discord.UICorner
+			Library.Discord["1d"] = Instance.new("UICorner", Library.Discord["1c"]);
+			Library.Discord["1d"]["CornerRadius"] = UDim.new(0, 15);
+
+			-- StarterGui.Main.Background.Help.Discord.Description
+			Library.Discord["1e"] = Instance.new("TextLabel", Library.Discord["1c"]);
+			Library.Discord["1e"]["TextWrapped"] = true;
+			Library.Discord["1e"]["TextTruncate"] = Enum.TextTruncate.AtEnd;
+			Library.Discord["1e"]["BorderSizePixel"] = 0;
+			Library.Discord["1e"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+			Library.Discord["1e"]["TextYAlignment"] = Enum.TextYAlignment.Top;
+			Library.Discord["1e"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.Discord["1e"]["TextSize"] = 16;
+			Library.Discord["1e"]["FontFace"] = Font.new([[rbxasset://fonts/families/SpecialElite.json]], Enum.FontWeight.Regular, Enum.FontStyle.Italic);
+			Library.Discord["1e"]["TextColor3"] = Color3.fromRGB(255, 0, 255);
+			Library.Discord["1e"]["BackgroundTransparency"] = 1;
+			Library.Discord["1e"]["RichText"] = true;
+			Library.Discord["1e"]["Size"] = UDim2.new(10.89719, 0, 0.87, 0);
+			Library.Discord["1e"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.Discord["1e"]["Text"] = [[.gg/]]..tostring(Main_Settings.DiscordLink);
+			Library.Discord["1e"]["Name"] = [[Description]];
+			Library.Discord["1e"]["Position"] = UDim2.new(1.273, 0, 0.13, 0);
+			
+			Library.Discord["1c"].InputBegan:Connect(function(input)
+				if (input.UserInputType == Enum.UserInputType.MouseButton1) or (input.UserInputType == Enum.UserInputType.Touch) then
+					Library.Youtube["18"]:TweenSize(UDim2.fromOffset(28,28),Enum.EasingDirection.Out,Enum.EasingStyle.Sine,.2,true)
+				end
+			end)
+
+			Library.Discord["1c"].InputEnded:Connect(function(input)
+				if (input.UserInputType == Enum.UserInputType.MouseButton1) or (input.UserInputType == Enum.UserInputType.Touch) then
+					if Library.Discord.IsHovering == false then
+						Library.Discord["18"]:TweenSize(UDim2.fromOffset(25,25),Enum.EasingDirection.Out,Enum.EasingStyle.Sine,.2,true)
+					end
+					if setclipboard then
+						setclipboard(Main_Settings.DiscordLink)
+						Library.Notify({Name = "Notification!",Image = tostring(Main_Settings.Logo),Content = "Discord Link Copied Successfully!",Time = 5})
+					else
+						Library.Notify({Name = "Key Link : ",Image = tostring(Main_Settings.Logo),Content = "discord.gg/"..tostring(Main_Settings.DiscordLink),Time = 30})
+					end
+				end
+			end)
+
+			Library.Discord["1c"].MouseEnter:Connect(function(input)
+				Library.Discord.IsHovering = true
+				Library.Discord["1c"]:TweenSize(UDim2.fromOffset(28,28),Enum.EasingDirection.Out,Enum.EasingStyle.Sine,.2,true)
+			end)
+
+			Library.Discord["1c"].MouseLeave:Connect(function(input)
+				Library.Discord.IsHovering = false
+				Library.Discord["1c"]:TweenSize(UDim2.fromOffset(25,25),Enum.EasingDirection.Out,Enum.EasingStyle.Sine,.2,true)
+			end)
+		end
+		
+		--// Exit Button \\--
+		
+		do
+			Library.Exit = {IsHovering = false}
+			-- StarterGui.Main.Background.Exit
+			Library.Exit["1f"] = Instance.new("ImageButton", Library["2"]);
+			Library.Exit["1f"]["BorderSizePixel"] = 0;
+			Library.Exit["1f"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			Library.Exit["1f"]["Image"] = [[http://www.roblox.com/asset/?id=18764973222]];
+			Library.Exit["1f"]["Size"] = UDim2.new(0, 25, 0, 25);
+			Library.Exit["1f"]["BackgroundTransparency"] = 1;
+			Library.Exit["1f"]["Name"] = [[Exit]];
+			Library.Exit["1f"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Library.Exit["1f"]["Position"] = UDim2.new(0.957, 0, 0.064, 0);
+			Library.Exit["1f"]["AnchorPoint"] = Vector2.new(.5,.5)
+
+			-- StarterGui.Main.Background.Exit.UICorner
+			Library["20"] = Instance.new("UICorner", Library.Exit["1f"]);
+			Library["20"]["CornerRadius"] = UDim.new(0, 15);
+			
+			Library.Exit["1f"].InputBegan:Connect(function(input)
+				if (input.UserInputType == Enum.UserInputType.MouseButton1) or (input.UserInputType == Enum.UserInputType.Touch) then
+					Library.Exit["1f"]:TweenSize(UDim2.fromOffset(28,28),Enum.EasingDirection.Out,Enum.EasingStyle.Sine,.2,true)
+				end
+			end)
+
+			Library.Exit["1f"].InputEnded:Connect(function(input)
+				if (input.UserInputType == Enum.UserInputType.MouseButton1) or (input.UserInputType == Enum.UserInputType.Touch) then
+					if Library.Exit.IsHovering == false then
+						Library.Exit["1f"]:TweenSize(UDim2.fromOffset(25,25),Enum.EasingDirection.Out,Enum.EasingStyle.Sine,.2,true)
+					end
+					task.wait(.2)
+					Library:Tween(Library["2"],{.3,"Sine","Out"},{Size = UDim2.new(0,0,0,0)},function()
+						Library["2"]:Destroy()
+						Library:Tween(Library.Blur,{1,"Linear"},{Size = 0},function()
+							Library.Blur:Destroy()
+						end)
+					end)
+					task.wait(.1)
+					for i,v in pairs(Library["2"]:GetChildren()) do if v.Name ~= "UICorner" and v.Visible then v.Visible = false end end
+
+				end
+			end)
+
+			Library.Exit["1f"].MouseEnter:Connect(function(input)
+				Library.Exit.IsHovering = true
+				Library.Exit["1f"]:TweenSize(UDim2.fromOffset(28,28),Enum.EasingDirection.Out,Enum.EasingStyle.Sine,.2,true)
+			end)
+
+			Library.Exit["1f"].MouseLeave:Connect(function(input)
+				Library.Exit.IsHovering = false
+				Library.Exit["1f"]:TweenSize(UDim2.fromOffset(25,25),Enum.EasingDirection.Out,Enum.EasingStyle.Sine,.2,true)
+			end)
+		end
+		
+	end
+
+	Library["2"].InputBegan:Connect(function(input)
+		if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then 
+			dragToggle = true
+			dragStart = input.Position
+			startPos = Library["2"].Position
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragToggle = false
+				end
+			end)
+		end
+	end)
+
+	game:GetService("UserInputService").InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			if dragToggle then
+				Library.updateInput(input)
+			end
+		end
+	end)
+end
+
+return Library
